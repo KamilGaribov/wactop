@@ -1,0 +1,55 @@
+version: '3.1'
+services:
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: "always"
+    ports:
+      - "80:80"
+      - '443:443'
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/vhost/:/etc/nginx/vhost.d:ro
+      - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+      - ./static/:/wactop/static
+      - ./media/:/wactop/media
+    environment:
+      - DEFAULT_HOST=127.0.0.1
+  
+  postgres:
+    container_name: postgres
+    image: postgres:12.1
+    env_file: 
+      - .env
+    volumes:
+      - ./.postgresdb/:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    restart: on-failure
+
+  web:
+    container_name: wactop
+    build: .
+    restart: "always"
+    env_file: .env
+    environment:
+      - VIRTUAL_HOST=94.20.21.82,127.0.0.1
+      - VIRTUAL_PORT=8000
+      - TIMEOUT=300
+      - HTTP_PORT=8000
+      - STATS_PORT=8001
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    links:
+      - postgres
+    depends_on:
+      - "postgres"
+
+  networks:
+    default:
+      external:
+        name: nginx-proxy
