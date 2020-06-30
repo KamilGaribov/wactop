@@ -142,6 +142,8 @@ from django.urls import reverse_lazy
 
 LOGIN_REDIRECT_URL = reverse_lazy('main:home')
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
