@@ -37,15 +37,15 @@ class Activity(models.Model):
     def __init__(self, *args, **kwargs):
         super(Activity, self).__init__(*args, **kwargs)
         self.old_status = self.status
-    def save(self, *args, **kwargs):
-        if self.old_status != self.status:
-            if self.status == 1:
-                if self.organizer.email:
-                    message = """
-                        Your post has been verificiated
-                        Visit https://www.wactop.com"""
-                    sendemail(self.organizer.email, message)
-        super(Activity, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.old_status != self.status:
+    #         if self.status == 1:
+    #             if self.organizer.email:
+    #                 message = """
+    #                     Your post has been verificiated
+    #                     Visit https://www.wactop.com"""
+    #                 sendemail(self.organizer.email, message)
+    #     super(Activity, self).save(*args, **kwargs)
     def __str__ (self):
         return self.title
 

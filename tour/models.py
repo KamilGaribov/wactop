@@ -51,15 +51,15 @@ class Tour(models.Model):
         super(Tour, self).__init__(*args, **kwargs)
         self.old_status = self.status
 
-    def save(self, *args, **kwargs):
-        if self.old_status != self.status:
-            if self.status == 1:
-                if self.organizer.email:
-                    message = """
-                        Your post has been verificiated
-                        Visit https://www.wactop.com"""
-                    sendemail(self.organizer.email, message)
-        super(Tour, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.old_status != self.status:
+    #         if self.status == 1:
+    #             if self.organizer.email:
+    #                 message = """
+    #                     Your post has been verificiated
+    #                     Visit https://www.wactop.com"""
+    #                 sendemail(self.organizer.email, message)
+    #     super(Tour, self).save(*args, **kwargs)
 
 class TourDetailAZ(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE)
@@ -98,4 +98,4 @@ class TourUrl(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE)
     url = models.URLField()
     def __str__ (self):
-        return self.tour.titlez
+        return self.tour.title
